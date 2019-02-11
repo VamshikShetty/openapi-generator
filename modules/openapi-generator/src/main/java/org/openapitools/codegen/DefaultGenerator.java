@@ -712,7 +712,12 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
                                 .defaultValue("")
                                 .compile(template);
 
-                        writeToFile(outputFilename, tmpl.execute(bundle));
+
+                        // Return tmpl.execute(bundle) if there is no submodule information to merge only in python
+                        String contents = tmpl.execute(bundle);
+                        if(support.merge)
+                            contents = mergeFileContent(outputFilename, contents);
+                        writeToFile(outputFilename, contents);
                         File written = new File(outputFilename);
                         files.add(written);
                         if (config.isEnablePostProcessFile()) {
