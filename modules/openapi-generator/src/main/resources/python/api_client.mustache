@@ -9,6 +9,7 @@ from multiprocessing.pool import ThreadPool
 import os
 import re
 import tempfile
+import inspect
 
 # python 2 and python 3 compatibility library
 import six
@@ -71,6 +72,29 @@ class ApiClient(object):
         self.cookie = cookie
         # Set default User-Agent.
         self.user_agent = '{{#httpUserAgent}}{{{.}}}{{/httpUserAgent}}{{^httpUserAgent}}OpenAPI-Generator/{{{packageVersion}}}/python{{/httpUserAgent}}'
+
+        # linking Submodule directly with submodules 
+        class AttrDict(dict):
+            def __getattr__(self, item):
+                return self[item]
+
+        submodule_dict = {}
+        filename = os.path.join(os.path.dirname(__file__), 'submodule_details')
+        f = open(filename, "r")
+
+        data = f.readlines()
+        for line in data:
+            submodule, submodule_api = line.split(',')
+            submodule_dict[submodule.replace('.','')] = submodule_api.replace(' ','').replace('\n','')
+
+        for key in submodule_dict.keys():
+            mod = __import__(submodule_dict[key], fromlist=[''])
+            temp = inspect.getmembers(mod, predicate=inspect.isclass)
+            attr = AttrDict()
+            for name, class_obj in temp:
+                attr[name] = class_obj(self)
+
+            setattr(self, key, attr)
 
     def __del__(self):
         if self._pool:
