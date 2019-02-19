@@ -292,11 +292,11 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
                 supportingFiles.add(new SupportingFile("rest.mustache", packagePath(), "rest.py"));
             }
         }
-        if(isSubModule){
+        // if(isSubModule){
             // If file already exists merge i.e merge API and MODELS data of submodule __init__ with main module __init__
-            supportingFiles.add(new SupportingFile("append_submodule_api_details.mustache", packageName.replace('.', File.separatorChar ) + File.separatorChar + apiPackage, "__init__.py", true));
-            supportingFiles.add(new SupportingFile("append_submodule_model_details.mustache", packageName.replace('.', File.separatorChar ) + File.separatorChar + modelPackage, "__init__.py", true));
-        }
+            // supportingFiles.add(new SupportingFile("append_submodule_api_details.mustache", packageName.replace('.', File.separatorChar ) + File.separatorChar + apiPackage, "__init__.py", true));
+            // supportingFiles.add(new SupportingFile("append_submodule_model_details.mustache", packageName.replace('.', File.separatorChar ) + File.separatorChar + modelPackage, "__init__.py", true));
+        // }
 
         modelPackage = packageName + invokerPackage + "." + modelPackage;
         apiPackage = packageName + invokerPackage + "." + apiPackage;
