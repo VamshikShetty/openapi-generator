@@ -232,7 +232,12 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         String readmePath = "README.md";
         String readmeTemplate = "README.mustache";
         if (generateSourceCodeOnly) {
-            readmePath = packagePath() + "_" + readmePath;
+            
+            if(isSubModule)
+                readmePath = packagePath() + File.separatorChar + readmePath;
+            else
+                readmePath = packagePath() + "_" + readmePath;
+
             readmeTemplate = "README_onlypackage.mustache";
         }
         supportingFiles.add(new SupportingFile(readmeTemplate, "", readmePath));
@@ -253,6 +258,17 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         }
         else{
             supportingFiles.add(new SupportingFile("__init__package_submodule.mustache", packagePath(), "__init__.py"));
+        }
+
+        // Add Stub File
+        if(!isSubModule){
+            supportingFiles.add(new SupportingFile("empty.mustache", packagePath() + File.separatorChar + "stub", "__init__.py"));
+            supportingFiles.add(new SupportingFile("stub_main.mustache", packagePath() + File.separatorChar + "stub", "main.py"));
+            supportingFiles.add(new SupportingFile("empty.mustache", packagePath() + File.separatorChar + "stub", "stub_mtds.py"));
+        }
+        else{
+            supportingFiles.add(new SupportingFile("stub_main_append.mustache", this.packageName.replace('.', File.separatorChar) + File.separatorChar + "stub", "main.py", true));
+            supportingFiles.add(new SupportingFile("stub_mtds_append.mustache", this.packageName.replace('.', File.separatorChar) + File.separatorChar + "stub", "stub_mtds.py", true));
         }
         
         supportingFiles.add(new SupportingFile("__init__model.mustache", packagePath() + File.separatorChar + modelPackage, "__init__.py"));

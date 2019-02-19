@@ -1,0 +1,5 @@
+class {{invokerPackage}}(object):
+    def __init__(self, client):
+        {{#apiInfo}}{{#apis}}from {{apiPackage}}.{{classVarName}} import {{classname}}
+        self.{{classname}} = {{classname}}(client)
+        {{/apis}}{{/apiInfo}}

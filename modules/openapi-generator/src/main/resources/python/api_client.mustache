@@ -9,6 +9,7 @@ from multiprocessing.pool import ThreadPool
 import os
 import re
 import tempfile
+from .stub.main import stub
 
 # python 2 and python 3 compatibility library
 import six
@@ -71,6 +72,7 @@ class ApiClient(object):
         self.cookie = cookie
         # Set default User-Agent.
         self.user_agent = '{{#httpUserAgent}}{{{.}}}{{/httpUserAgent}}{{^httpUserAgent}}OpenAPI-Generator/{{{packageVersion}}}/python{{/httpUserAgent}}'
+        self.api = stub(self)
 
     def __del__(self):
         if self._pool:
