@@ -23,7 +23,7 @@ import {{modelPackage}}
 from {{packageName}} import rest
 
 
-class ApiClient(object):
+class ApiClient(stub):
     """Generic API client for OpenAPI client library builds.
 
     OpenAPI generic API client. This client handles the client-
@@ -60,6 +60,7 @@ class ApiClient(object):
 
     def __init__(self, configuration=None, header_name=None, header_value=None,
                  cookie=None, pool_threads=1):
+        super(ApiClient, self).__init__(client=self)
         if configuration is None:
             configuration = Configuration()
         self.configuration = configuration
@@ -72,7 +73,6 @@ class ApiClient(object):
         self.cookie = cookie
         # Set default User-Agent.
         self.user_agent = '{{#httpUserAgent}}{{{.}}}{{/httpUserAgent}}{{^httpUserAgent}}OpenAPI-Generator/{{{packageVersion}}}/python{{/httpUserAgent}}'
-        self.api = stub(self)
 
     def __del__(self):
         if self._pool:
@@ -284,7 +284,7 @@ class ApiClient(object):
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-            
+
                 if "." not in klass:
                     klass = getattr({{modelPackage}}, klass)
                 else:

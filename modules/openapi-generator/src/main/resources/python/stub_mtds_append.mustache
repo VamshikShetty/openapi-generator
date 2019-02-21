@@ -1,5 +1,16 @@
-class {{invokerPackage}}(object):
+class {{invokerPackage}}_api(object):
     def __init__(self, client):
         {{#apiInfo}}{{#apis}}from {{apiPackage}}.{{classVarName}} import {{classname}}
         self.{{classname}} = {{classname}}(client)
         {{/apis}}{{/apiInfo}}
+
+class {{invokerPackage}}_model(object):
+    def __init__(self):
+        {{#models}}{{#model}}from {{modelPackage}}.{{classFilename}} import {{classname}}
+        self.{{classname}} = {{classname}}
+        {{/model}}{{/models}}
+
+class {{invokerPackage}}(object):
+    def __init__(self, client):
+        self.api = {{invokerPackage}}_api(client)
+        self.model = {{invokerPackage}}_model()
