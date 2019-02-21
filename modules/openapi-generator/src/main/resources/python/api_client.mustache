@@ -284,22 +284,22 @@ class ApiClient(object):
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-
-                if "." not in kclass:
+            
+                if "." not in klass:
                     klass = getattr({{modelPackage}}, klass)
                 else:
                     # if kclass is referencing the sub package model then getattr is not equiped to handle consecutive attr retrievals
                     # getattr( main_package, 'sub1.class')
                     # klass = getattr({{modelPackage}}, klass)
                     
-                    def getattr_recu( module, list_kclass.split('.')):
-                        temp = getattr(module, list_kclass[0])
-                        if len(list_kclass) == 1:
+                    def getattr_recu( module, list_klass):
+                        temp = getattr(module, list_klass[0])
+                        if len(list_klass) == 1:
                             return temp
                         else:
-                            getattr_recu(temp, list_kclass[1:])
+                            return getattr_recu(temp, list_klass[1:])
                     
-                    klass = getattr_recu({{packageName}}, klass)
+                    klass = getattr_recu({{packageName}}, klass.split('.'))
 
 
 
