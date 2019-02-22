@@ -293,6 +293,9 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
             }
         }
 
+        if(isSubModule)
+            supportingFiles.add(new SupportingFile("__init__model_subpackage_append.mustache", this.packageName.replace('.', File.separatorChar) + File.separatorChar + "models", "__init__.py", true));
+
         modelPackage = packageName + invokerPackage + "." + modelPackage;
         apiPackage = packageName + invokerPackage + "." + apiPackage;
 
