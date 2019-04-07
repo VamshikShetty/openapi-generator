@@ -37,7 +37,10 @@ impl {{{classname}}} for {{{classname}}}Client {
         let mut req_builder = client.{{{httpMethod}}}(uri_str.as_str());
 
         {{#queryParams}}
-        req_builder = req_builder.query(&[("{{{baseName}}}", &{{{paramName}}}{{#isListContainer}}.into_iter().map(|p| p.to_string()).collect::<Vec<String>>().join(","){{/isListContainer}}.to_string())]);
+        let query_{{{paramName}}} = &{{{paramName}}}{{#isListContainer}}.into_iter().map(|p| p.to_string()).collect::<Vec<String>>().join(","){{/isListContainer}}.to_string();
+        if ! query_{{{paramName}}}.is_empty() {
+            req_builder = req_builder.query(&[("{{{baseName}}}", query_{{{paramName}}})]);
+        }
         {{/queryParams}}
         {{#hasAuthMethods}}
         {{#authMethods}}
